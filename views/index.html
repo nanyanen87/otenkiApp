@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</head>
+<body>
+  <div id="weatherReportApp">
+    <input type="text" v-model="prefecture" placeholder="都道府県">
+    <input type="text" v-model="memo">
+    
+    <button v-on:click="getReq">GET</button>
+    <button v-on:click="postReq">POST</button>
+
+    <table class="table">
+      <h1>.jsの更新はクロームの履歴を削除</h1>
+      <tr>
+        <th>日付</th><th>天気</th><th>メモ</th>
+      </tr>
+      <tr v-for="b in weatherReports">
+        <td>{{b.date}}</td>
+        <td>{{b.weather}}</td>
+        <!--todo 編集ボタンつける -->
+        <td>{{b.memo}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./views/js/main.js"></script>
+</body>
+</html>
