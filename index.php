@@ -6,6 +6,7 @@ if(empty($_SERVER['PATH_INFO'])){
 }
 
 //スラッシュで区切られたurlを取得
+//escape処理が必要？
 $analysis = explode('/', $_SERVER['PATH_INFO']);
 $call;
 
@@ -17,28 +18,29 @@ foreach ($analysis as $value) {
     }
 }
 
-//GET,POSTはcontrollerの中？
 if (file_exists('./routes'.$call.'.php')) {
   include('./routes/'.$call.'.php');
 } else {
   include('./routes/error.php');
 }
 
-if (file_exists('./models/'.$call.'.php')) {
+//sample
+// if (file_exists('./models/'.$call.'.php')) {
 
-  include('./models/'.$call.'.php');
-  //$call名のクラスをインスタンス化します
-  $class = new $call();
-  //modelのindexメソッドを呼ぶ仕様です
-  $ret = $class->index($analysis);
-  //配列キーが設定されている配列なら展開します
-  if (!is_null($ret)) {
-      if(is_array($ret)){
-         extract($ret);
-      }
-  }
-}
+//   include('./models/'.$call.'.php');
+//   //$call名のクラスをインスタンス化します
+//   $class = new $call();
+//   //modelのindexメソッドを呼ぶ仕様です
+//   $ret = $class->index($analysis);
+//   //配列キーが設定されている配列なら展開します
+//   if (!is_null($ret)) {
+//       if(is_array($ret)){
+//          extract($ret);
+//       }
+//   }
+// }
 
+//sample
 // if (file_exists('./views/'.$call.'.php')) {
 //   // echo $_SERVER['PATH_INFO'];
 //   include('./views/'.$call.'.php');

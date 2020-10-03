@@ -4,11 +4,12 @@ let app = new Vue ({
   el : "#weatherReportApp",
   data:{
     prefecture:"",
-    memo:"更新",
+    memo:"更新sita",
     weatherReports: [],
   },
   methods:{
     getReq: function(){
+      //todo async awaitで書き直す
       axios.get("/routes/mainController.php",{
         params: {
           prefecture: this.prefecture,
@@ -25,7 +26,7 @@ let app = new Vue ({
       }).
       catch(error=>{
         console.log(error);
-        console.log("errorだよ");
+        console.log("errorだyoyo");
       })
     },
     postReq: function(){

@@ -5,14 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+  <!-- デプロイするときは場所とパス書き換えないとダメ、ゆくゆくはバンドルする -->
+  <link rel="stylesheet" href="/css/stylesheet.css">
 </head>
 <body>
   <div id="weatherReportApp">
-    <input type="text" v-model="prefecture" placeholder="都道府県">
-    <input type="text" v-model="memo">
+    <div>
+      <label for="">選択式</label>
+      <input type="radio">
+      <label for="">入力式</label>
+      <input type="radio">
+    </div>
+    <div>
+      <!-- databaseから持ってこれるけど別に動的に取得してもしゃーないから書く -->
+    <select name="prefecture" id="">
+      <option value="">都道府県、地域を選択してください</option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <input type="text" v-model="prefecture" placeholder="都道府県、地域を選択してください">
+    </div>
+
+    
+    <!-- <input type="text" v-model="memo"> -->
     
     <button v-on:click="getReq">GET</button>
-    <button v-on:click="postReq">POST</button>
+    <!-- <button v-on:click="postReq">POST</button> -->
 
     <table class="table">
       <h1>.jsの更新はクロームの履歴を削除</h1>

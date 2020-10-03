@@ -1,9 +1,9 @@
 <?php
 //ifで$_SERVER['REQUEST_METHOD']=GET,POSTで場合わけ？
 if($_SERVER['REQUEST_METHOD']=='GET'){
-  echo getMethod();
+  echo getMethod();//json文字列を出力してjsで受け取り
 }else if($_SERVER['REQUEST_METHOD']=='POST'){
-  echo postMethod()."desu";
+  echo postMethod();
 }else{
   echo "error";
 }
@@ -16,28 +16,30 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
     $user     = 'root';
     $password = 'root';
     $results = array();
+    $prefecture = htmlspecialchars($_GET["prefecture"]);//インジェクション対策
     try{
       $dbh = new PDO($dsn,$user,$password);
-      // print('接続に成功しました。');
-      // クエリの実行
-      
-      foreach($dbh->query('SELECT * from weatherReport where prefecture="東京都"') as $row) {
+      // print('接続に成功しました。'.$prefecture);
+      //preparedステートメントを使う
+      $prepare = $dbh->prepare('SELECT prefecture,date,weather,memo from weatherReport where prefecture= ?');
+      $prepare->bindValue(1,$prefecture,PDO::PARAM_STR);
+      $prepare->execute();
+      // fetchで取ってきた配列は””がついておらずjsonエンコードできないので整形
+      foreach($prepare->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $results[]= [
           'date'=>$row['date'],
           'weather'=>$row['weather'],
           'prefecture'=>$row['prefecture'],
           'memo'=>$row['memo']
         ];
-       
-    }
-    $dbh = null;
+      }
+      return json_encode($results);
+      $dbh = null;
     
     }catch(PDOException $e){
       print("データベースの接続に失敗しました。".$e->getMessage());
       die();
     }
-    
-    return json_encode($results);//json_encode()してなかったら文字列（Array）が返ってたのに、これで配列が返るようになった。おそらくブラウザが勝手にjson形式を配列に変換してくれてる？
 
   }
   function postMethod(){
