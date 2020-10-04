@@ -6,88 +6,90 @@
   <title>Document</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
   <!-- デプロイするときは場所とパス書き換えないとダメ、ゆくゆくはバンドルする -->
-  <link rel="stylesheet" href="/css/stylesheet.css">
+  <!-- <link rel="stylesheet" href="/css/stylesheet.css"> -->
 </head>
 <body>
   <div id="weatherReportApp">
     <div>
-      <label for="">選択式</label>
-      <input type="radio">
       <label for="">入力式</label>
-      <input type="radio">
+      <input type="radio" name="input" v-model="userInput" value="text" >
+      <label for="">選択式</label>
+      <input type="radio" name="input" v-model="userInput" value="select">
     </div>
-    <div>
-      <!-- databaseから持ってこれるけど別に動的に取得してもしゃーないから書く -->
-    <select name="prefecture" id="">
-      <option value="">都道府県、地域を選択してください</option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-      <option value=""></option>
-    </select>
-    <input type="text" v-model="prefecture" placeholder="都道府県、地域を選択してください">
+    <div v-if="userInput==='text'">
+      <input type="text" v-model="prefecture" placeholder="都道府県、地域を入力してください">
     </div>
-
+    <div v-else-if="userInput==='select'">
+      <!-- todo 配列で自動生成する -->
+      <select name="prefecture" id="">
+        <option value="">未実装です</option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+      </select>
+    </div>
     
+
     <!-- <input type="text" v-model="memo"> -->
     
     <button v-on:click="getReq">GET</button>
     <!-- <button v-on:click="postReq">POST</button> -->
 
     <table class="table">
-      <h1>.jsの更新はクロームの履歴を削除</h1>
+      <h1>{{regionName}}</h1>
       <tr>
         <th>日付</th><th>天気</th><th>メモ</th>
       </tr>
