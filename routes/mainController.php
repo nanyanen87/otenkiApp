@@ -1,13 +1,13 @@
 <?php
 //ifで$_SERVER['REQUEST_METHOD']=GET,POSTで場合わけ
 if($_SERVER['REQUEST_METHOD']=='GET'){
-  echo getMethod();//json文字列を出力してjsで受け取り
+  echo getMethod();//json文字列を出力してjsで受け取り。クラス化したらController名::getMethod()
 }else if($_SERVER['REQUEST_METHOD']=='POST'){
   echo postMethod();
 }else{
   echo "error";
 }
-
+  //クラス化したほうがよさそう。
   function getMethod(){
     // $result = $_GET['prefecture'];
     //ここに細かい処理を書く
@@ -15,7 +15,6 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
     $dsn      = 'mysql:host=localhost;dbname=otenkiApp;charset=utf8';
     $user     = 'root';
     $password = 'root';
-    $results = array();
     $prefecture = htmlspecialchars($_GET["prefecture"]);//インジェクション対策
     //入力バリデーション処理ここにおく
     $prefectureNameArray =[
@@ -96,12 +95,13 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
       die();
     }
     
-    
+    //postと共通化できるか？
     try{
       //DB接続
       $dbh = new PDO($dsn,$user,$password);
       //preparedステートメントを使う
-      $prepare = $dbh->prepare('SELECT prefecture,date,weather,memo from weatherReport where prefecture= ?');
+      $sqlStatement = 'SELECT prefecture,date,weather,memo,id from weatherReport where prefecture= ?';
+      $prepare = $dbh->prepare($sqlStatement);
       $prepare->bindValue(1,$prefecture,PDO::PARAM_STR);
       $prepare->execute();
       // fetchで取ってきた配列は””がついておらずjsonエンコードできないので整形→select json_array()で行ける説、下記の方ができるやつっぽいけど
@@ -110,7 +110,8 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
           'date'=>$row['date'],
           'weather'=>$row['weather'],
           'prefecture'=>$row['prefecture'],
-          'memo'=>$row['memo']
+          'memo'=>$row['memo'],
+          'id'=>$row['id'],
         ];
       }
       return json_encode($results);
@@ -123,9 +124,47 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
 
   }
   function postMethod(){
-    $result = $_POST['memo'];
-    //ここに細かい処理を書く
-    return $result;
+    $memoText = htmlspecialchars($_POST["memoText"]);
+    $memoId = htmlspecialchars($_POST["memoId"]);
+    $prefecture = htmlspecialchars($_POST["prefecture"]);
+
+    try{
+      $dsn      = 'mysql:host=localhost;dbname=otenkiApp;charset=utf8';
+      $user     = 'root';
+      $password = 'root';
+      $dbh = new PDO($dsn,$user,$password);
+
+      $sqlStatement1 = 'UPDATE weatherReport set memo= ? where id= ?';
+      $sqlStatement2 = 'SELECT prefecture,date,weather,memo,id from weatherReport where prefecture= ?';
+
+      //メモPOST用
+      //本当はここでgmailAPI使ってリマインダーメール送れるようにしたかったけど時間切れ。
+      $prepare1 = $dbh->prepare($sqlStatement1);
+      $prepare1->bindValue(1,$memoText,PDO::PARAM_STR);
+      $prepare1->bindValue(2,$memoId,PDO::PARAM_INT);
+      $prepare1->execute();
+
+      //レスポンス用
+      $prepare2 = $dbh->prepare($sqlStatement2);
+      $prepare2->bindValue(1,$prefecture,PDO::PARAM_STR);
+      $prepare2->execute();
+
+      foreach($prepare2->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $results[]= [
+          'date'=>$row['date'],
+          'weather'=>$row['weather'],
+          'prefecture'=>$row['prefecture'],
+          'memo'=>$row['memo'],
+          'id'=>$row['id'],
+        ];
+      }
+      return json_encode($results);
+      $dbh = null;
+    
+    }catch(PDOException $e){
+      print("データベースの接続に失敗しました。".$e->getMessage());
+      die();
+    }
   }
 
 

@@ -1,18 +1,19 @@
 'use strict'
 
-let app = new Vue ({
+const app = new Vue ({
   el : "#weatherReportApp",
   data:{
     prefecture:"大阪府",
-    memo:"メモメモ",
+    memo:[],
     weatherReports: [],
     userInput:"text",
     regionName:"都道府県、地域名",
-    toggle:false,
+    toggles:{},
   },
   methods:{
-    showMemo: function(){
-      this.toggle===false ? this.toggle=true:this.toggle=false;
+    showMemo: function(i){
+      this.toggles[i]===false ? this.toggles[i]=true:this.toggles[i]=false;
+      console.log(this.toggles);
     },
     clear: function(){
       this.prefecture="";
@@ -25,11 +26,16 @@ let app = new Vue ({
         }
       }).
       then(res=>{
-        console.log("success");
-        console.log(res);
+        // console.log(res.data);
           this.weatherReports = res.data;
           this.regionName = res.data[0].prefecture;
-
+          let memo=[];
+          let toggles={};
+          res.data.forEach(function(e){
+            let key = e.id;
+            toggles[key] = false;
+          });
+          this.toggles = toggles;
         // ↓これいらない？おそらくブラウザが勝手にjson読み取ってる
         // let dataEncoded = JSON.parse(res.data);
         // console.log(dataEncoded);
@@ -40,14 +46,19 @@ let app = new Vue ({
         alert(error.response.data);
       })
     },
-    postReq: function(){
+    postReq: function(i){
       //ブラウザでポストする用のクラス
       let params = new URLSearchParams();
-      params.append('memo', this.memo);
+      //何番目のメモか、パラメータ追加しないと。
+      params.append('memoId', i);
+      params.append('memoText', this.memo[i]);
+      params.append('prefecture',this.regionName)
+      
       axios.post("/routes/mainController.php",params).
       then(res=>{
         console.log("success");
         console.log(res);
+        this.weatherReports = res.data;
       }).
       catch(error=>{
         console.log(error);
