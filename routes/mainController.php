@@ -92,6 +92,7 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
       }
     }catch(Exception $e){
       print($e->getMessage());
+      http_response_code(400);//レスポンスオブジェクトはどこにあるの？
       die();
     }
     

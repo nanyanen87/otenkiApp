@@ -6,18 +6,18 @@
   <title>Document</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
   <!-- デプロイするときは場所とパス書き換えないとダメ、ゆくゆくはバンドルする -->
-  <!-- <link rel="stylesheet" href="/css/stylesheet.css"> -->
+  <link rel="stylesheet" href="./views/css/stylesheet.css">
 </head>
 <body>
   <div id="weatherReportApp">
     <div>
       <label for="">入力式</label>
-      <input type="radio" name="input" v-model="userInput" value="text" >
+      <input type="radio" name="input" v-model="userInput" value="text">
       <label for="">選択式</label>
       <input type="radio" name="input" v-model="userInput" value="select">
     </div>
     <div v-if="userInput==='text'">
-      <input type="text" v-model="prefecture" placeholder="都道府県、地域を入力してください">
+      <input type="text" v-model="prefecture" v-on:keyup.esc="clear" v-on:keyup.enter="getReq" placeholder="都道府県、地域を入力してください">
     </div>
     <div v-else-if="userInput==='select'">
       <!-- todo 配列で自動生成する -->
@@ -81,12 +81,7 @@
         <option value=""></option>
       </select>
     </div>
-    
-
-    <!-- <input type="text" v-model="memo"> -->
-    
     <button v-on:click="getReq">GET</button>
-    <!-- <button v-on:click="postReq">POST</button> -->
 
     <table class="table">
       <h1>{{regionName}}</h1>
@@ -98,6 +93,13 @@
         <td>{{b.weather}}</td>
         <!--todo 編集ボタンつける -->
         <td>{{b.memo}}</td>
+        <td>
+          <!-- 見てくれのバランスが悪い -->
+          <input v-show="toggle" type="text" v-model="memo">
+          <input v-show="toggle" type="button" v-on:click="postReq" value="保存">
+          <input v-show="toggle" type="button"  v-on:click="showMemo" value="閉じる">
+          <input v-show="!toggle" type="button"  v-on:click="showMemo" value="編集">
+        </td>
       </tr>
     </table>
   </div>
