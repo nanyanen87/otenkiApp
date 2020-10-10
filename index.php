@@ -1,28 +1,33 @@
 <?php
-if(empty($_SERVER['PATH_INFO'])){
-  //紹介ページを表示
-  include('./views/index.html');   
-  exit;
+if (empty($_SERVER['PATH_INFO'])) {
+  include __DIR__."/views/index.html";
+  exit();
 }
+
+
+//nginxのlocation設定が必要
+//動的なwebページつくるにはlocation ~ \.php${}を設定しないとダメ
 
 //スラッシュで区切られたurlを取得
-//escape処理が必要？
-$analysis = explode('/', $_SERVER['PATH_INFO']);
-$call;
+//url直接入力でもページ見れちゃう
+//todo controller名/method名で値を渡せるようにする
+// $analysis = explode('/', $_SERVER['PATH_INFO']);
+// $call;
+// foreach ($analysis as $value) {
+//     if ($value !== "") {
+//         $call = $value;
 
-foreach ($analysis as $value) {
+//         break;
+//     }
+// }
 
-    if ($value !== "") {
-        $call = $value;
-        break;
-    }
-}
+// if (file_exists('./routes' . $call . '.php')) {
+//     include './routes/' . $call . '.php';
+// } else {
+//     //用意してない
+//     include './routes/error.php';
+// }
 
-if (file_exists('./routes'.$call.'.php')) {
-  include('./routes/'.$call.'.php');
-} else {
-  include('./routes/error.php');
-}
 
 //sample
 // if (file_exists('./models/'.$call.'.php')) {
@@ -47,5 +52,3 @@ if (file_exists('./routes'.$call.'.php')) {
 // } else {
 //   include('./views/error.php');
 // }
-
-

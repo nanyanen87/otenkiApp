@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-  <!-- デプロイするときは場所とパス書き換えないとダメ、ゆくゆくはバンドルする -->
-  <link rel="stylesheet" href="./views/css/stylesheet.css">
+  <title>otenkiApp</title>
+  <link rel="stylesheet" href="/views/css/stylesheet.css">
 </head>
 <body>
   <div id="weatherReportApp">
@@ -88,20 +86,23 @@
       <tr>
         <th>日付</th><th>天気</th><th>メモ</th>
       </tr>
-      <tr v-for="el in weatherReports">
-        <td>{{el.date}}</td>
-        <td>{{el.weather}}</td>
-        <!--todo 編集ボタンつける -->
-        <td>{{el.memo}}</td>
+      <!-- v-forで配列の中身自動生成 -->
+      <tr v-for="weatherRow in weatherReports">
+        <td>{{weatherRow.date}}</td>
+        <td>{{weatherRow.weather}}</td>
+        <td>{{weatherRow.memo}}</td>
+        
         <td>
-          <!-- 見てくれのバランスが悪い、CSS調整しないとなー -->
-          <div v-show="toggles[el.id]">
-            <input type="text" v-model="memo[el.id]">          
-            <input type="button" v-on:click="postReq(el.id)" value="保存">
-            <input type="button"  v-on:click="showMemo(el.id)" value="閉じる">
+          <!-- メモの編集画面表示 -->
+          <div v-show="toggles[weatherRow.id]">
+            <input type="text" v-model="memo[weatherRow.id]">          
+            <input type="button" v-on:click="postReq(weatherRow.id)" value="保存">
+            <input type="button"  v-on:click="showMemo(weatherRow.id)" value="閉じる">
           </div>
-          <input v-show="!toggles[el.id]" type="button"  v-on:click="showMemo(el.id)" value="編集">
+          <input v-show="!toggles[weatherRow.id]" type="button"  v-on:click="showMemo(weatherRow.id)" value="編集">
         </td>
+        
+        
       </tr>
     </table>
   </div>
@@ -109,6 +110,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="./views/js/main.js"></script>
+  <!-- phpで読み込んでるから相対パスでかけない -->
+  <script src="/views/js/main.js"></script>
 </body>
 </html>
